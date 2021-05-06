@@ -161,17 +161,17 @@ M.on_attach = function(bufnr)
                 local key = string.format('"%s"', rule.key_map)
                 if rule.key_map == '"' then key = [['"']] end
                 local mapping = string.format("v:lua.MPairs.autopairs_map(%d,%s)", bufnr, key)
-                api.nvim_buf_set_keymap(bufnr, "i", rule.key_map, mapping, {expr = true, noremap = true})
+                api.nvim_buf_set_keymap(bufnr, "i", rule.key_map, mapping, {expr = true, noremap = true,silent=true})
 
                 local key_end = rule.end_pair:sub(1,1)
                 if #key_end == 1 and key_end ~= rule.key_map and rule.move_cond ~= nil then
                     mapping = string.format([[v:lua.MPairs.autopairs_map(%d, '%s')]], bufnr,key_end )
-                    vim.api.nvim_buf_set_keymap(bufnr, 'i',key_end, mapping, {expr = true, noremap = true})
+                    vim.api.nvim_buf_set_keymap(bufnr, 'i',key_end, mapping, {expr = true, noremap = true,silent=true})
                 end
             else
                 if rule.key_map ~= "" then
                     local mapping = string.format("v:lua.MPairs.autopairs_map(%d,'%s')", bufnr, rule.key_map)
-                    api.nvim_buf_set_keymap(bufnr, "i", rule.key_map, mapping, {expr = true, noremap = true})
+                    api.nvim_buf_set_keymap(bufnr, "i", rule.key_map, mapping, {expr = true, noremap = true,silent=true})
                 elseif rule.is_endwise == false then
                     enable_insert_auto = true
                 end
