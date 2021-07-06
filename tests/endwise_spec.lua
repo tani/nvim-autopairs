@@ -8,6 +8,7 @@ ts.setup {
 }
 _G.npairs = npairs;
 vim.api.nvim_set_keymap('i' , '<CR>','v:lua.npairs.check_break_line_char()', {expr = true , noremap = true})
+vim.cmd[[set tabstop=2 shiftwidth=2 expandtab]]
 
 
 local data = {
@@ -21,7 +22,6 @@ local data = {
         after    = [[end ]]
     },
     {
-        -- only = true;
         name     = "add newline have endwise" ,
         filepath = './tests/endwise/init.lua',
         filetype = "lua",
@@ -60,7 +60,6 @@ local data = {
         },
         after    = [[end ]]
     },
-
     {
         name     = "add endwise inside both if" ,
         filepath = './tests/endwise/init.lua',
@@ -75,7 +74,7 @@ local data = {
             [[  ]],
             [[end]]
         },
-        after    = [[end ]]
+        after    = [[  end ]]
     },
     {
         name     = " don't add endwise inside both if" ,
@@ -108,7 +107,7 @@ local data = {
             [[  ]],
             [[end]]
         },
-        after    = [[end ]]
+        after    = [[ end ]]
     },
 
     {
@@ -129,24 +128,42 @@ local data = {
     },
 
     {
-        name     = " add endwise on match rule multiple" ,
+        name     = "don't add endwise on match rule multiple" ,
         filepath = './tests/endwise/init.lua',
         filetype = "lua",
         linenr   = 5,
         key      = [[<cr>]],
         before   ={
-            [[M.add_rules = function (rules)]],
-            [[ if data1 then| ]],
-            [[    for _, rule in pairs(rules) do]],
-            [[        table.insert(M.config.rules, rule)]],
-            [[    end]],
+            [[for _, rule in pairs(rules) do]],
+            [[    if rule.start_pair then| ]] ,
+            [[  ]],
+            [[  ]],
+            [[  ]],
+            [[ end]],
             [[end]],
         },
-        after    = [[end ]]
+        after    = [[  ]]
     },
-                    -- or
-                    -- (end_parent - end_target == 1 and col_parent ~= 0) -- normal case when group
+    -- {
+    --     name     = " add endwise on match rule multiple" ,
+    --     filepath = './tests/endwise/init.lua',
+    --     filetype = "lua",
+    --     linenr   = 5,
+    --     key      = [[<cr>]],
+    --     before   ={
+    --         [[M.add_rules = function (rules)]],
+    --         [[ if data1 then|  ]],
+    --         [[ ]],
+    --         [[    for _, rule in pairs(rules) do]],
+    --         [[        table.insert(M.config.rules, rule)]],
+    --         [[    end]],
+    --         [[end]],
+    --     },
+    --     after    = [[end ]]
+    -- },
 }
+
+
 
 local run_data = _G.Test_filter(data)
 
